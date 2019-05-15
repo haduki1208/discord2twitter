@@ -1,0 +1,28 @@
+{
+  "name": "discord2twitter",
+  "version": "1.0.0",
+  "description": "This is an example of how to make a Discord bot out of Eris, a quicker and lighter Discord.js.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "debug": "node --nolazy --inspect-brk=9229 server.js"
+  },
+  "dependencies": {
+    "eris": "^0.8.6"
+  },
+  "engines": {
+    "node": "10.x"
+  },
+  "repository": {
+    "url": "https://glitch.com/edit/#!/discord2twitter"
+  },
+  "license": "MIT",
+  "keywords": [
+    "node",
+    "glitch",
+    "eris",
+    "discord-bot",
+    "discord",
+    "bot"
+  ]
+}
