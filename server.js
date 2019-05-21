@@ -1,5 +1,5 @@
-const Eris = require('eris');
-const bot = new Eris(process.env.TOKEN);
+const Discord = require('discord.js');
+const bot = new Discord.Client();
 const Twitter = require('twitter');
 const client = new Twitter({
   consumer_key: process.env.TWITTER_CONSUMER_KEY,
@@ -7,24 +7,37 @@ const client = new Twitter({
   access_token_key: process.env.TWITTER_ACCESS_TOKEN_KEY,
   access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET
 });
-const { CHANNEL_ID, USER_ID } = process.env;
 
 bot.on('ready', () => {
-  console.log('Eris Bot is Online.');
+  console.log('I am ready!');
 });
 
-bot.on('messageCreate', async msg => {
-  const content = msg.content.toLowerCase();
-  const isTargetChannel = msg.channel.id === CHANNEL_ID;
-  const isTargetUser = msg.author.id === USER_ID;
-  const hadCmdOption = /-t\s+/.test(content);
+bot.on('message', async message => {
+  const isTargetChannel = message.channel.id === process.env.CHANNEL_ID;
+  const isTargetUser = message.author.id === process.env.USER_ID;
+  let isTweet = false;
 
-  if (isTargetChannel && isTargetUser && hadCmdOption) {
-    // const tweets = await readTweets('五等分の花嫁');
-    // const status = await writeTweet();
-    msg.channel.createMessage('書き込み');
+  const pureMessage = message.content
+    .split(' ')
+    .filter(line => {
+      if (line === '!t') {
+        isTweet = true;
+        return false;
+      }
+      return true;
+    })
+    .join(' ');
+
+  if (isTargetChannel && isTargetUser && isTweet) {
+    // const tweets = await readTweets('バンドリ');
+    const status = await writeTweet(pureMessage).catch(error => {
+      message.channel.send(error);
+      throw error;
+    });
   }
 });
+
+bot.login(process.env.DISCORD_TOKEN);
 
 const readTweets = screen_name =>
   new Promise((resolve, reject) => {
@@ -53,7 +66,3 @@ const writeTweet = status =>
       });
     });
   });
-
-bot.connect().catch(err => {
-  console.log(`Logging in error:\n${err}`);
-});
