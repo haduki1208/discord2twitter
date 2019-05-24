@@ -20,7 +20,7 @@ bot.on('message', async message => {
   const pureMessage = message.content
     .split(' ')
     .filter(line => {
-      if (line === '!t') {
+      if (line === '!t' || line === '!tweet') {
         isTweet = true;
         return false;
       }
